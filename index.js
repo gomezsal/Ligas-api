@@ -27,7 +27,7 @@ const createListings = (leagueTeams) => {
     const venue = document.createElement("p");
     venue.textContent = `Stadium: ${team.venue.name}, ${team.venue.city}`;
 
-    // Botón para cargar jugadores
+    // Button to load players
     const loadPlayersBtn = document.createElement("button");
     loadPlayersBtn.className = "load-players-btn";
     loadPlayersBtn.textContent = "Ver Jugadores";
@@ -43,7 +43,7 @@ const createListings = (leagueTeams) => {
   });
 };
 
-// Función para renderizar la lista de jugadores
+// Rendering players
 const renderPlayerList = (players, teamName) => {
   const section = document.querySelector(`section.${teamName}`);
   const oldList = section.querySelector(".player-list");
@@ -81,7 +81,7 @@ const renderPlayerList = (players, teamName) => {
   section.appendChild(playerList);
 };
 
-// Función para obtener equipos de una liga
+// Fetching league teams
 const fetchTeams = async (leagueId) => {
   const loading = document.getElementById("loading");
   loading.style.display = "block";
@@ -118,7 +118,7 @@ const fetchTeams = async (leagueId) => {
   }
 };
 
-// Función para obtener jugadores de un equipo
+// Fetching team players
 const loadPlayers = async (teamId, teamClassName) => {
   const section = document.querySelector(`section.${teamClassName}`);
   const button = section.querySelector(".load-players-btn");
@@ -147,11 +147,11 @@ const loadPlayers = async (teamId, teamClassName) => {
 
     if (data.response && data.response.length > 0) {
       renderPlayerList(data.response, teamClassName);
-      button.textContent = "Recargar Jugadores";
+      button.textContent = "Reload Players";
     } else {
       const errorMsg = document.createElement("p");
       errorMsg.style.color = "red";
-      errorMsg.textContent = "No se encontraron jugadores";
+      errorMsg.textContent = "Players couldn't be found";
       section.appendChild(errorMsg);
     }
   } catch (error) {
