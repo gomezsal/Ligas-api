@@ -5,82 +5,105 @@
   }
   
   body {
-    font-family: "poppins", sans-serif;
+    font-family: "jaro", sans-serif;
     font-weight: 400;
     font-style: normal;
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-      url('stadium.jpg');
+    font-size: 3rem;
+    background: url(stadium.png);
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-attachment: fixed;
     color: white;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   
   /* Header */
   header {
     text-align: center;
-    padding: 80px 40px;
+    padding: 60px 20px 40px;
+    background: transparent;
   }
   
   header h1 {
-    font-family: "jaro", sans-serif;
-    font-weight: 400;
-    font-style: normal;
     font-size: 5rem;
-    letter-spacing: 0.0.25rem;
-    margin: 0;
+    font-weight: 700;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    line-height: 3rem;
-    text-align: center;
-
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
   }
   
   /* Controls */
   .controls {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 15px;
-    padding: 30px 20px;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 20px;
+    background: transparent;
+    max-width: 800px;
+    margin: 0 auto;
   }
   
   #leagueSelect {
-    padding: 12px 20px;
-    font-size: 1.1rem;
-    font-family: "bebas-neue-pro", sans-serif;
-    border: 2px solid white;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-radius: 5px;
+    padding: 18px 50px 18px 25px;
+    font-size: 1.2rem;
+    font-family: "poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    border: 3px solid #333;
+    border-right: none;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    border-radius: 8px 0 0 8px;
     cursor: pointer;
-    min-width: 250px;
-    text-transform: uppercase;
+    min-width: 350px;
+    text-transform: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%23dc0000" d="M10 14L4 6h12z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    font-style: italic;
+    position: relative;
   }
   
   #leagueSelect option {
-    background: #1a1a1a;
-    color: white;
+    background: white;
+    color: #333;
+    padding: 10px;
+    font-style: normal;
+    font-weight: 600;
+  }
+  
+  #leagueSelect option:first-child {
+    font-style: italic;
+    color: #999;
   }
   
   #loadTeamsBtn {
-    padding: 12px 30px;
-    font-size: 1.1rem;
-    font-family: "bebas-neue-pro", sans-serif;
+    padding: 18px 35px;
+    font-size: 1.2rem;
+    font-family: "poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     background: #dc0000;
     color: white;
-    border: none;
-    border-radius: 5px;
+    border: 3px solid #333;
+    border-radius: 0 8px 8px 0;
     cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+  
+    letter-spacing: 1.5px;
     transition: all 0.3s ease;
+    font-weight: 700;
   }
   
   #loadTeamsBtn:hover {
     background: #b00000;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(220, 0, 0, 0.5);
   }
   
   /* Loading */
@@ -95,11 +118,12 @@
   /* Main content */
   main {
     max-width: 1400px;
-    margin: 0 auto;
+    margin: 40px auto;
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
+    flex: 1;
   }
   
   /* Team sections */
@@ -257,3 +281,26 @@
     letter-spacing: 1px;
   }
   
+  /* Responsive */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 2.5rem;
+    }
+  
+    main {
+      grid-template-columns: 1fr;
+      padding: 15px;
+    }
+  
+    .controls {
+      flex-direction: column;
+    }
+  
+    #leagueSelect {
+      width: 100%;
+    }
+  
+    .player-list {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
