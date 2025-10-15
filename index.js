@@ -9,36 +9,58 @@ const sanitizeClassName = (name) => {
     .replace(/[^\w-]/g, "");
 };
 
-const createListings = (leagueTeams) => {
+// Create team buttons that act like navigation
+const createTeamButtons = (leagueTeams) => {
   const main = document.querySelector("main");
   main.innerHTML = "";
 
   leagueTeams.forEach((team) => {
-    const section = document.createElement("section");
-    section.className = sanitizeClassName(team.team.name);
+    const teamClassName = sanitizeClassName(team.team.name);
 
-    const h2 = document.createElement("h2");
-    h2.textContent = team.team.name;
+    // Create the clickable team button
+    const button = document.createElement("button");
+    button.className = `team-button ${teamClassName}`;
 
     const logo = document.createElement("img");
     logo.src = team.team.logo;
     logo.alt = `${team.team.name} Logo`;
 
-    const venue = document.createElement("p");
-    venue.textContent = `Stadium: ${team.venue.name}, ${team.venue.city}`;
+    const teamName = document.createElement("span");
+    teamName.className = "team-name";
+    teamName.textContent = team.team.name;
 
-    // Button to load players
-    const loadPlayersBtn = document.createElement("button");
-    loadPlayersBtn.className = "load-players-btn";
-    loadPlayersBtn.textContent = "Ver Jugadores";
-    loadPlayersBtn.onclick = () =>
-      loadPlayers(team.team.id, sanitizeClassName(team.team.name));
+    button.appendChild(logo);
+    button.appendChild(teamName);
 
-    section.appendChild(h2);
-    section.appendChild(logo);
-    section.appendChild(venue);
-    section.appendChild(loadPlayersBtn);
+    // Create the hidden section for players
+    const section = document.createElement("section");
+    section.className = teamClassName;
 
+    // Click handler to toggle player visibility
+    button.addEventListener("click", async () => {
+      const isActive = button.classList.contains("active");
+
+      // Remove active class from all buttons and hide all sections
+      document.querySelectorAll(".team-button").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      document.querySelectorAll("section").forEach((sec) => {
+        sec.classList.remove("active");
+      });
+
+      // If this button wasn't active, make it active and load players
+      if (!isActive) {
+        button.classList.add("active");
+        section.classList.add("active");
+
+        // Load players if not already loaded
+        if (section.children.length === 0) {
+          await loadPlayers(team.team.id, teamClassName);
+        }
+      }
+    });
+
+    main.appendChild(button);
     main.appendChild(section);
   });
 };
@@ -46,11 +68,7 @@ const createListings = (leagueTeams) => {
 // Rendering players
 const renderPlayerList = (players, teamName) => {
   const section = document.querySelector(`section.${teamName}`);
-  const oldList = section.querySelector(".player-list");
-  if (oldList) oldList.remove();
-
-  const playerList = document.createElement("div");
-  playerList.className = "player-list";
+  section.innerHTML = ""; // Clear loading message
 
   players.forEach((data) => {
     const { player, statistics } = data;
@@ -75,10 +93,8 @@ const renderPlayerList = (players, teamName) => {
       </div>
     `;
 
-    playerList.appendChild(card);
+    section.appendChild(card);
   });
-
-  section.appendChild(playerList);
 };
 
 // Fetching league teams
@@ -103,16 +119,15 @@ const fetchTeams = async (leagueId) => {
     console.log("Teams data:", data);
 
     if (data.response && data.response.length > 0) {
-      createListings(data.response);
+      createTeamButtons(data.response);
     } else {
       document.querySelector("main").innerHTML =
         '<div class="error">No se encontraron equipos</div>';
     }
   } catch (error) {
     console.error("Error fetching teams:", error);
-    document.querySelector(
-      "main"
-    ).innerHTML = `<div class="error">Error al cargar equipos: ${error.message}</div>`;
+    document.querySelector("main").innerHTML = 
+      `<div class="error">Error al cargar equipos: ${error.message}</div>`;
   } finally {
     loading.style.display = "none";
   }
@@ -121,10 +136,9 @@ const fetchTeams = async (leagueId) => {
 // Fetching team players
 const loadPlayers = async (teamId, teamClassName) => {
   const section = document.querySelector(`section.${teamClassName}`);
-  const button = section.querySelector(".load-players-btn");
-
-  button.disabled = true;
-  button.textContent = "Cargando...";
+  
+  // Show loading message
+  section.innerHTML = '<div class="loading">Cargando jugadores...</div>';
 
   try {
     const response = await fetch(
@@ -147,24 +161,12 @@ const loadPlayers = async (teamId, teamClassName) => {
 
     if (data.response && data.response.length > 0) {
       renderPlayerList(data.response, teamClassName);
-      button.textContent = "Reload Players";
     } else {
-      const errorMsg = document.createElement("p");
-      errorMsg.style.color = "red";
-      errorMsg.textContent = "Players couldn't be found";
-      section.appendChild(errorMsg);
+      section.innerHTML = '<p style="color: red; text-align: center;">No se encontraron jugadores</p>';
     }
   } catch (error) {
     console.error("Error fetching players:", error);
-    const errorMsg = document.createElement("p");
-    errorMsg.style.color = "red";
-    errorMsg.textContent = `Error: ${error.message}`;
-    section.appendChild(errorMsg);
-  } finally {
-    button.disabled = false;
-    if (button.textContent === "Cargando...") {
-      button.textContent = "Ver Jugadores";
-    }
+    section.innerHTML = `<p style="color: red; text-align: center;">Error: ${error.message}</p>`;
   }
 };
 
@@ -180,4 +182,3 @@ document.getElementById("loadTeamsBtn").addEventListener("click", () => {
 
   fetchTeams(leagueId);
 });
-// ...existing code...
