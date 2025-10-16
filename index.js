@@ -1,7 +1,10 @@
+//This code was done using the Pokemon API example by Harold Sikkema as a base and adapting it to the Football API with the help of Copilot and ChatGPT
+
 const API_KEY = "31606b7e376d0096a6231cf7c818f1e4";
 const API_URL = "https://v3.football.api-sports.io";
 const SEASON = "2023";
 
+// Copilot suggested sanitizing names so the teams with more than one word don't break the class names
 const sanitizeClassName = (name) => {
   return name
     .toLowerCase()
@@ -9,7 +12,8 @@ const sanitizeClassName = (name) => {
     .replace(/[^\w-]/g, "");
 };
 
-// Create team buttons that act like navigation
+// I asked ChatGPT to help me with this code by providing the following prompt: implement the wireframe I sent you into my existing code by adding a load
+// button for each team that when clicked fetches and displays the players of that team in a hidden section below the team card.
 const createListings = (leagueTeams) => {
   const main = document.querySelector("main");
   main.innerHTML = "";
@@ -70,13 +74,26 @@ const createListings = (leagueTeams) => {
   });
 };
 
-// Rendering players
+// I asked ChatGPT to help me with this code by providing the following prompt: can you make it so the index.js code I sent earlier also fetches 
+// the stats for each player from the API and displays it on this section of the code replacing the fetched data from the API into the the value 
+// div.      <div class="stats">         <div class="stat"><span class="label">GOL</span><span class="value">20</span></div> ... etc
+// replace it with GO being stats.goals.total, SHO being stats.shots.total, PAS being stats.passes.total... tec.
+
 const renderPlayerList = (players, teamName) => {
   const section = document.querySelector(`section.${teamName}`);
   section.innerHTML = ""; // Clear loading message
 
   players.forEach((data) => {
     const { player, statistics } = data;
+
+    // Extract stats from the first statistics object (current season)
+    const stats = statistics[0] || {};
+    const goals = stats.goals?.total || 0;
+    const shots = stats.shots?.total || 0;
+    const passes = stats.passes?.total || 0;
+    const attempts = stats.dribbles?.attempts || 0;
+    const tackles = stats.tackles?.total || 0;
+    const fouls = stats.fouls?.committed || 0;
 
     const card = document.createElement("div");
     card.className = "player-card";
@@ -86,15 +103,15 @@ const renderPlayerList = (players, teamName) => {
       <h4>${player.name}</h4>
       <p>${player.birth.date} | ${player.nationality}</p>
       <p>${player.weight} | ${player.height}</p>
-      <p>Position: ${statistics[0]?.games.position || "Unknown"}</p>
+      <p>Position: ${stats.games?.position || "Unknown"}</p>
 
       <div class="stats">
-        <div class="stat"><span class="label">PAC</span><span class="value">20</span></div>
-        <div class="stat"><span class="label">SHO</span><span class="value">20</span></div>
-        <div class="stat"><span class="label">PAS</span><span class="value">20</span></div>
-        <div class="stat"><span class="label">DRI</span><span class="value">20</span></div>
-        <div class="stat"><span class="label">DEF</span><span class="value">20</span></div>
-        <div class="stat"><span class="label">PHY</span><span class="value">20</span></div>
+        <div class="stat"><span class="label">GOL</span><span class="value">${goals}</span></div>
+        <div class="stat"><span class="label">SHO</span><span class="value">${shots}</span></div>
+        <div class="stat"><span class="label">PAS</span><span class="value">${passes}</span></div>
+        <div class="stat"><span class="label">DRI</span><span class="value">${attempts}</span></div>
+        <div class="stat"><span class="label">TAC</span><span class="value">${tackles}</span></div>
+        <div class="stat"><span class="label">FOL</span><span class="value">${fouls}</span></div>
       </div>
     `;
 
@@ -138,12 +155,12 @@ const fetchTeams = async (leagueId) => {
   }
 };
 
-// Fetching team players
+// Used the PokeAPI code by Harold Sikkema as reference and change the code to fit my website in order to fetch team players
 const loadPlayers = async (teamId, teamClassName) => {
   const section = document.querySelector(`section.${teamClassName}`);
   
-  // Show loading message
-  section.innerHTML = '<div class="loading">Cargando jugadores...</div>';
+  // Show loading message (Suggested by ChatGPT)
+  section.innerHTML = '<div class="loading">Loading Players</div>';
 
   try {
     const response = await fetch(
@@ -175,13 +192,13 @@ const loadPlayers = async (teamId, teamClassName) => {
   }
 };
 
-// Event Listener para cargar equipos
+// Event Listener loading teams
 document.getElementById("loadTeamsBtn").addEventListener("click", () => {
   const leagueSelect = document.getElementById("leagueSelect");
   const leagueId = leagueSelect.value;
 
   if (!leagueId) {
-    alert("Por favor selecciona una liga");
+    alert("Please select a league");
     return;
   }
 
