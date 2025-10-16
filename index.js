@@ -12,8 +12,9 @@ const sanitizeClassName = (name) => {
     .replace(/[^\w-]/g, "");
 };
 
-// I asked ChatGPT to help me with this code by providing the following prompt: implement the wireframe I sent you into my existing code by adding a load
+// I asked Claude to help me with this code by providing the following prompt: implement the wireframe I sent you into my existing code by adding a load
 // button for each team that when clicked fetches and displays the players of that team in a hidden section below the team card.
+//The base code for const was from the PokeAPI example by Harold Sikkema and I adapted it to my goals with the help of both ChatGPT and Copilot
 const createListings = (leagueTeams) => {
   const main = document.querySelector("main");
   main.innerHTML = "";
@@ -74,7 +75,7 @@ const createListings = (leagueTeams) => {
   });
 };
 
-// I asked ChatGPT to help me with this code by providing the following prompt: can you make it so the index.js code I sent earlier also fetches 
+// I asked Claude to help me with this code by providing the following prompt: can you make it so the index.js code I sent earlier also fetches 
 // the stats for each player from the API and displays it on this section of the code replacing the fetched data from the API into the the value 
 // div.      <div class="stats">         <div class="stat"><span class="label">GOL</span><span class="value">20</span></div> ... etc
 // replace it with GO being stats.goals.total, SHO being stats.shots.total, PAS being stats.passes.total... tec.
@@ -159,7 +160,7 @@ const fetchTeams = async (leagueId) => {
 const loadPlayers = async (teamId, teamClassName) => {
   const section = document.querySelector(`section.${teamClassName}`);
   
-  // Show loading message (Suggested by ChatGPT)
+  // Show loading message (Suggested by Claude)
   section.innerHTML = '<div class="loading">Loading Players</div>';
 
   try {
