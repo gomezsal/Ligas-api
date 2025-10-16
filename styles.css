@@ -177,14 +177,16 @@ main {
   width: 100%;
   padding: 15px 20px;
   font-size: 1.1rem;
-  font-family: "jaro", sans-serif;
+  font-family: "poppins", sans-serif;
+  font-weight: 600;
+  font-style: bolD;
   background: #dc0000;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: .5px;
   font-weight: 400;
   transition: all 0.3s ease;
 }
@@ -282,12 +284,13 @@ section.active {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
+  Color: #FFE553;
 }
 
 .stat .value {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #ffd700;
+  color: #ffffff;
 }
 
 /* Error messages */
