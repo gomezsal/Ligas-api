@@ -144,12 +144,12 @@ const fetchTeams = async (leagueId) => {
       createListings(data.response);
     } else {
       document.querySelector("main").innerHTML =
-        '<div class="error">No se encontraron equipos</div>';
+        '<div class="error">No teams were found</div>';
     }
   } catch (error) {
     console.error("Error fetching teams:", error);
     document.querySelector("main").innerHTML = 
-      `<div class="error">Error al cargar equipos: ${error.message}</div>`;
+      `<div class="error">Error loading teams: ${error.message}</div>`;
   } finally {
     loading.style.display = "none";
   }
