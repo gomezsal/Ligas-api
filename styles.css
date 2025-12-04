@@ -6,6 +6,45 @@
   box-sizing: border-box;
 }
 
+nav{
+  font-family: "jaro", sans-serif;
+  justify-content: center;
+}
+nav .nav-btn {
+  padding: 12px 30px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: "poppins", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+nav .nav-btn:hover {
+  color: white;
+  border-bottom-color: rgba(220, 0, 0, 0.5);
+}
+
+nav .nav-btn.active {
+  color: #dc0000;
+  border-bottom-color: #dc0000;
+  font-weight: 600;
+}
+
+/* Page Sections */
+.page-section {
+  display: none;
+  flex: 1;
+}
+
+.page-section.active {
+  display: block;
+}
+
 body {
   font-family: "jaro", sans-serif;
   font-weight: 400;
